@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:minesweeper/desktop/icon.dart';
 import 'package:minesweeper/minesweeper/view/page.dart';
@@ -9,8 +11,8 @@ class Desktop extends StatefulWidget {
 
   const Desktop({Key? key, required this.desktop}) : super(key: key);
 
-  static MyInheritedData of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<MyInheritedData>() as MyInheritedData;
+  static _DesktopState of(BuildContext context) =>
+      context.findRootAncestorStateOfType<_DesktopState>()!;
 
   @override
   _DesktopState createState() => _DesktopState();
@@ -18,13 +20,12 @@ class Desktop extends StatefulWidget {
 
 class _DesktopState extends State<Desktop> {
   List<Widget> children = [];
+  Map<Key, Completer> childrenCompleters = {};
 
   @override
   void initState() {
     super.initState();
-    children.add(MinesweeperWindow(
-      key: UniqueKey(),
-    ));
+    openWindow(MinesweeperWindow(key: UniqueKey()));
   }
 
   @override
@@ -32,11 +33,7 @@ class _DesktopState extends State<Desktop> {
     return CustomTheme(
       data: customThemeData,
       child: Scaffold(
-        body: MyInheritedData(
-          requestFocus: requestFocus,
-          close: closeWindow,
-          pushRoute: openWindow,
-          child: Stack(
+        body: Stack(
             children: [
               Positioned.fill(
                 child: Container(
@@ -60,13 +57,8 @@ class _DesktopState extends State<Desktop> {
                     ),
                     WinDesktopIcon(
                       onPressed: () {
-                        setState(() {
-                          children.add(MinesweeperWindow(
-                            key: UniqueKey(),
-                          ));
-                          // todo remove all dependencies outside desktop package
-                        });
-                      },
+                        openWindow(MinesweeperWindow(key: UniqueKey()));
+                      }, // todo remove all dependencies outside desktop package
                       child: Image.asset(
                         "assets/icons/mine_logo.png",
                         fit: BoxFit.contain,
@@ -80,14 +72,16 @@ class _DesktopState extends State<Desktop> {
             ],
           ),
         ),
-      ),
     );
   }
 
-  void openWindow(Widget window) {
+  Future<T?> openWindow<T>(Widget window) {
+    assert(window.key != null, "Window have to have a key");
     setState(() {
       children.add(window);
+      childrenCompleters[window.key!] = Completer<T?>();
     });
+    return childrenCompleters[window.key!]!.future as Future<T?>;
   }
 
   void requestFocus(Key window) {
@@ -98,32 +92,19 @@ class _DesktopState extends State<Desktop> {
     });
   }
 
-  void closeWindow(Key window) {
+  void closeWindow<T>(Key window, {T? data}) {
     setState(() {
-      children.remove(children.firstWhere((child) => child.key == window));
+      var child = children.firstWhere((child) => child.key == window);
+      var completer = childrenCompleters[child.key!]!;
+      children.remove(child);
+
+      if (childrenCompleters[child.key!]!.future is Future<T?>) { // no support for dynamic here
+        completer.complete(data);
+      } else {
+        completer.complete(null);
+      }
+
+      childrenCompleters.remove(child.key!);
     });
-  }
-}
-
-class MyInheritedData extends InheritedWidget {
-  final void Function(Widget window) pushRoute;
-  final void Function(Key window) close;
-  final void Function(Key window) requestFocus;
-
-  const MyInheritedData({
-    Key? key,
-    required this.pushRoute,
-    required Widget child,
-    required this.close,
-    required this.requestFocus,
-  }) : super(key: key, child: child);
-
-  static MyInheritedData of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<MyInheritedData>()!;
-  }
-
-  @override
-  bool updateShouldNotify(MyInheritedData oldWidget) {
-    return false;
   }
 }

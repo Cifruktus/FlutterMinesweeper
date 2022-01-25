@@ -56,7 +56,7 @@ class _WindowState extends State<Window> {
   }
 
   void close() {
-    Desktop.of(context).close(widget.appKey);
+    Desktop.of(context).closeWindow(widget.appKey);
   }
 
   @override
