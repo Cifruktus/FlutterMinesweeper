@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:minesweeper/minesweeper/models/minefield_highlight.dart';
 import 'package:minesweeper/minesweeper/models/minesweeper_cell.dart';
+import 'package:minesweeper/minesweeper/models/minesweeper_settings.dart';
 import 'package:minesweeper/minesweeper/models/position.dart';
 import 'package:minesweeper/minesweeper/ticker.dart';
 
@@ -101,6 +102,11 @@ class MinesweeperGameCubit extends Cubit<MinesweeperGameState> {
   void resetGame() {
     var field = generateField(state.width, state.height);
     emit(MinesweeperGameInitial(field: field, bombsCount: state.bombsCount));
+  }
+
+  void setSettings(MinesweeperSettings settings) {
+    var field = generateField(settings.width, settings.height);
+    emit(MinesweeperGameInitial(field: field, bombsCount: settings.bombs));
   }
 
   void pressCell(IntPos pos) {
