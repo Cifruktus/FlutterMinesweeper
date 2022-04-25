@@ -11,6 +11,7 @@ class Window extends StatefulWidget {
   final String title;
   final Widget? icon;
   final Key appKey;
+  final bool centered;
 
   const Window({
     Key? key,
@@ -18,6 +19,7 @@ class Window extends StatefulWidget {
     required this.appKey,
     required this.title,
     this.icon,
+    this.centered = true,
   }) : super(key: key);
 
   @override
@@ -25,7 +27,11 @@ class Window extends StatefulWidget {
 }
 
 class _WindowState extends State<Window> {
+  static const defaultOffset = Offset(15,15);
+  static const defaultCenterOffset = Offset(-50,-100);
   Offset position = Offset.zero;
+  Size? desktopSize;
+
   bool focused = false;
   late FocusNode focusNode;
 
@@ -65,10 +71,15 @@ class _WindowState extends State<Window> {
   @override
   Widget build(BuildContext context) {
     var theme = CustomTheme.of(context);
+    desktopSize ??= Desktop.of(context).desktopSize;
+
+    var offset = widget.centered
+        ? (Offset(desktopSize!.width, desktopSize!.height)) / 2 + position + defaultCenterOffset
+        : defaultOffset + position;
 
     return Positioned(
-        left: position.dx,
-        top: position.dy,
+        left: offset.dx,
+        top: offset.dy,
         child: Focus(
           autofocus: true,
           focusNode: focusNode,
