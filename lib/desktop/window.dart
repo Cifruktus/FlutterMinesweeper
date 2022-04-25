@@ -4,6 +4,9 @@ import 'package:minesweeper/desktop/desktop.dart';
 import 'package:minesweeper/widgets/theme.dart';
 
 class Window extends StatefulWidget {
+  static _WindowState of(BuildContext context) =>
+      context.findRootAncestorStateOfType<_WindowState>()!;
+
   final Widget child;
   final String title;
   final Widget? icon;
@@ -55,8 +58,8 @@ class _WindowState extends State<Window> {
     });
   }
 
-  void close() {
-    Desktop.of(context).closeWindow(widget.appKey);
+  void close<K>({K? data}) {
+    Desktop.of(context).closeWindow(widget.appKey, data: data);
   }
 
   @override
