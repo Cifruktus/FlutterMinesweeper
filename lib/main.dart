@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:minesweeper/desktop/desktop.dart';
 import 'package:minesweeper/desktop/icon.dart';
 import 'package:minesweeper/minesweeper/view/page.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+final Uri githubPage = Uri.parse('https://github.com/Cifruktus/FlutterMinesweeper');
 
 void main() {
   window.document.onContextMenu.listen((evt) => evt.preventDefault());
@@ -27,7 +30,7 @@ class MyApp extends StatelessWidget {
           [
             WinDesktopIcon(
               onPressed: (c) {
-                //todo add link to github
+                launchUrl(githubPage);
               },
               child: Image.asset(
                 "assets/icons/git_logo.png",
@@ -43,7 +46,7 @@ class MyApp extends StatelessWidget {
                 "assets/icons/mine_logo.png",
                 fit: BoxFit.contain,
               ),
-              text: "Mine-sweeper",
+              text: "Mine - sweeper 1",
             ),
           ],
       ),
