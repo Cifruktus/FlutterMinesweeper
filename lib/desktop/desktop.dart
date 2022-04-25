@@ -21,6 +21,7 @@ class Desktop extends StatefulWidget {
 class _DesktopState extends State<Desktop> {
   List<Widget> children = [];
   Map<Key, Completer> childrenCompleters = {};
+  Size desktopSize = Size.zero;
 
   @override
   void initState() {
@@ -33,44 +34,49 @@ class _DesktopState extends State<Desktop> {
     return CustomTheme(
       data: customThemeData,
       child: Scaffold(
-        body: Stack(
-            children: [
-              Positioned.fill(
-                child: Container(
-                  color: Color(0xFF5595CE),
-                ),
-              ),
-              widget.desktop,
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  children: [
-                    WinDesktopIcon(
-                      onPressed: () {
-                        //todo add link to github
-                      },
-                      child: Image.asset(
-                        "assets/icons/git_logo.png",
-                        fit: BoxFit.contain,
-                      ),
-                      text: "Visit github page.exe",
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            desktopSize = Size(constraints.maxWidth, constraints.maxHeight);
+            return Stack(
+                children: [
+                  Positioned.fill(
+                    child: Container(
+                      color: Color(0xFF5595CE),
                     ),
-                    WinDesktopIcon(
-                      onPressed: () {
-                        openWindow(MinesweeperWindow(key: UniqueKey()));
-                      }, // todo remove all dependencies outside desktop package
-                      child: Image.asset(
-                        "assets/icons/mine_logo.png",
-                        fit: BoxFit.contain,
-                      ),
-                      text: "Mine-sweeper",
+                  ),
+                  widget.desktop,
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      children: [
+                        WinDesktopIcon(
+                          onPressed: () {
+                            //todo add link to github
+                          },
+                          child: Image.asset(
+                            "assets/icons/git_logo.png",
+                            fit: BoxFit.contain,
+                          ),
+                          text: "Visit github page.exe",
+                        ),
+                        WinDesktopIcon(
+                          onPressed: () {
+                            openWindow(MinesweeperWindow(key: UniqueKey()));
+                          }, // todo remove all dependencies outside desktop package
+                          child: Image.asset(
+                            "assets/icons/mine_logo.png",
+                            fit: BoxFit.contain,
+                          ),
+                          text: "Mine-sweeper",
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              ...children
-            ],
-          ),
+                  ),
+                  ...children
+                ],
+              );
+          }
+        ),
         ),
     );
   }
