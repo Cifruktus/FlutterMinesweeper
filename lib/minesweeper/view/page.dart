@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minesweeper/desktop/button.dart';
+import 'package:minesweeper/desktop/desktop.dart';
 import 'package:minesweeper/desktop/window.dart';
 import 'package:minesweeper/minesweeper/cubit/minesweeper_game_cubit.dart';
 import 'package:minesweeper/minesweeper/models/minefield_highlight.dart';
+import 'package:minesweeper/minesweeper/models/minesweeper_settings.dart';
+import 'package:minesweeper/minesweeper/settings/view/page.dart';
 import 'package:minesweeper/minesweeper/view/game_board.dart';
 import 'package:minesweeper/widgets/theme.dart';
 import 'package:minesweeper/minesweeper/view/indicator.dart';
@@ -32,6 +35,16 @@ class Minesweeper extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        WinTextButton(
+          child: Text("Settings"),
+          onPressed: (){
+            Desktop.of(context).openWindow<MinesweeperSettings>(MinesweeperSettingsView.getWindow(context)).then((result) {
+              if (result is MinesweeperSettings) {
+                context.read<MinesweeperGameCubit>().setSettings(result);
+              }
+            });
+          },
+        ),
         Container(
           decoration: BoxDecoration(
             border: CustomTheme.of(context).elevatedBorder,
