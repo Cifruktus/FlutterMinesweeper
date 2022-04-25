@@ -2,6 +2,8 @@ import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:minesweeper/desktop/desktop.dart';
+import 'package:minesweeper/desktop/icon.dart';
+import 'package:minesweeper/minesweeper/view/page.dart';
 
 void main() {
   window.document.onContextMenu.listen((evt) => evt.preventDefault());
@@ -21,6 +23,29 @@ class MyApp extends StatelessWidget {
       ),
       home: Desktop(
         desktop: Container(),
+        icons:
+          [
+            WinDesktopIcon(
+              onPressed: (c) {
+                //todo add link to github
+              },
+              child: Image.asset(
+                "assets/icons/git_logo.png",
+                fit: BoxFit.contain,
+              ),
+              text: "Visit github page.exe",
+            ),
+            WinDesktopIcon(
+              onPressed: (c) {
+                Desktop.of(c).openWindow(MinesweeperWindow(key: UniqueKey()));
+              },
+              child: Image.asset(
+                "assets/icons/mine_logo.png",
+                fit: BoxFit.contain,
+              ),
+              text: "Mine-sweeper",
+            ),
+          ],
       ),
     );
   }

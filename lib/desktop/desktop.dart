@@ -8,8 +8,9 @@ import 'package:minesweeper/widgets/theme.dart';
 
 class Desktop extends StatefulWidget {
   final Widget desktop;
+  final List<Widget> icons;
 
-  const Desktop({Key? key, required this.desktop}) : super(key: key);
+  const Desktop({Key? key, required this.desktop, this.icons = const []}) : super(key: key);
 
   static _DesktopState of(BuildContext context) =>
       context.findRootAncestorStateOfType<_DesktopState>()!;
@@ -48,28 +49,7 @@ class _DesktopState extends State<Desktop> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Column(
-                      children: [
-                        WinDesktopIcon(
-                          onPressed: () {
-                            //todo add link to github
-                          },
-                          child: Image.asset(
-                            "assets/icons/git_logo.png",
-                            fit: BoxFit.contain,
-                          ),
-                          text: "Visit github page.exe",
-                        ),
-                        WinDesktopIcon(
-                          onPressed: () {
-                            openWindow(MinesweeperWindow(key: UniqueKey()));
-                          }, // todo remove all dependencies outside desktop package
-                          child: Image.asset(
-                            "assets/icons/mine_logo.png",
-                            fit: BoxFit.contain,
-                          ),
-                          text: "Mine-sweeper",
-                        ),
-                      ],
+                      children: widget.icons,
                     ),
                   ),
                   ...children

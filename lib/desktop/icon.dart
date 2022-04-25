@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class WinDesktopIcon extends StatefulWidget {
   final Widget child;
   final String text;
-  final void Function() onPressed;
+  final void Function(BuildContext context) onPressed;
 
   const WinDesktopIcon({
     Key? key,
@@ -40,7 +40,7 @@ class _WinDesktopIconState extends State<WinDesktopIcon> {
     );
 
     return GestureDetector(
-      onDoubleTap: widget.onPressed,
+      onDoubleTap: () => widget.onPressed(context),
       onTapDown: (_) => setState(() => pressed = true),
       onTapUp: (_) => setState(() => pressed = false),
       onTapCancel: () => setState(() => pressed = false),
