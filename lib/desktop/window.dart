@@ -12,6 +12,7 @@ class Window extends StatefulWidget {
   final Widget? icon;
   final Key appKey;
   final bool centered;
+  final Size expectedSize;
 
   const Window({
     Key? key,
@@ -20,6 +21,7 @@ class Window extends StatefulWidget {
     required this.title,
     this.icon,
     this.centered = true,
+    this.expectedSize = const Size(50, 100),
   }) : super(key: key);
 
   @override
@@ -28,7 +30,6 @@ class Window extends StatefulWidget {
 
 class _WindowState extends State<Window> {
   static const defaultOffset = Offset(15,15);
-  static const defaultCenterOffset = Offset(-50,-100);
   Offset position = Offset.zero;
   Size? desktopSize;
 
@@ -74,7 +75,9 @@ class _WindowState extends State<Window> {
     desktopSize ??= Desktop.of(context).desktopSize;
 
     var offset = widget.centered
-        ? (Offset(desktopSize!.width, desktopSize!.height)) / 2 + position + defaultCenterOffset
+        ? (Offset(desktopSize!.width, desktopSize!.height)) / 2 +
+            position -
+        (Offset(widget.expectedSize.width, widget.expectedSize.height) / 2)
         : defaultOffset + position;
 
     return Positioned(
