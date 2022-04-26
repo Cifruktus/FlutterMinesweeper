@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:minesweeper/desktop/button.dart';
 import 'package:minesweeper/desktop/desktop.dart';
@@ -30,6 +32,7 @@ class Window extends StatefulWidget {
 
 class _WindowState extends State<Window> {
   static const defaultOffset = Offset(15,15);
+  static const defaultRandomness = Offset(15,15);
   Offset position = Offset.zero;
   Size? desktopSize;
 
@@ -50,6 +53,9 @@ class _WindowState extends State<Window> {
         focused = focusNode.hasFocus;
       });
     });
+
+    var r = Random();
+    position = Offset(r.nextDouble() * defaultRandomness.dx, r.nextDouble()* defaultRandomness.dy);
   }
 
   void ensureFocused() {
