@@ -44,6 +44,9 @@ class _MyAppState extends State<MyApp> {
       ),
       home: Desktop(
         desktop: Container(),
+        onInitState: (desktop) {
+          desktop.openWindow(MinesweeperWindow(key: UniqueKey()));
+        },
         icons:
           [
             WinDesktopIcon(

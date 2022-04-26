@@ -9,8 +9,9 @@ import 'package:minesweeper/widgets/theme.dart';
 class Desktop extends StatefulWidget {
   final Widget desktop;
   final List<Widget> icons;
+  final Function(_DesktopState)? onInitState;
 
-  const Desktop({Key? key, required this.desktop, this.icons = const []}) : super(key: key);
+  const Desktop({Key? key, required this.desktop, this.icons = const [], this.onInitState}) : super(key: key);
 
   static _DesktopState of(BuildContext context) =>
       context.findRootAncestorStateOfType<_DesktopState>()!;
@@ -27,7 +28,7 @@ class _DesktopState extends State<Desktop> {
   @override
   void initState() {
     super.initState();
-    openWindow(MinesweeperWindow(key: UniqueKey()));
+    widget.onInitState?.call(this);
   }
 
   @override
