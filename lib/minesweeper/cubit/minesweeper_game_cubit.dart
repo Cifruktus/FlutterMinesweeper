@@ -15,9 +15,9 @@ class MinesweeperGameCubit extends Cubit<MinesweeperGameState> {
   final Ticker _ticker;
   StreamSubscription<int>? _tickerSubscription;
 
-  factory MinesweeperGameCubit(int width, int height, int bombs) {
-    var field = generateField(width, height);
-    return MinesweeperGameCubit._(field, bombs, Ticker());
+  factory MinesweeperGameCubit(MinesweeperSettings settings) {
+    var field = generateField(settings.width, settings.height);
+    return MinesweeperGameCubit._(field, settings.bombs, Ticker());
   }
 
   MinesweeperGameCubit._(

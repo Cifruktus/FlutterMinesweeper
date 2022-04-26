@@ -12,7 +12,11 @@ import 'package:minesweeper/widgets/theme.dart';
 import 'package:minesweeper/minesweeper/view/indicator.dart';
 
 class MinesweeperWindow extends StatelessWidget {
-  const MinesweeperWindow({required Key key}) : super(key: key);
+  final MinesweeperSettings initalSettings;
+  const MinesweeperWindow({
+    required Key key,
+    this.initalSettings = MinesweeperSettings.easy,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +25,7 @@ class MinesweeperWindow extends StatelessWidget {
       icon: Image.asset("assets/icons/mine_logo.png"),
       appKey: key!,
       child: BlocProvider(
-        create: (context) => MinesweeperGameCubit(8, 8, 10),
+        create: (context) => MinesweeperGameCubit(initalSettings),
         child: Minesweeper(),
       ),
     );
@@ -35,16 +39,6 @@ class Minesweeper extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        WinTextButton(
-          child: Text("Settings"),
-          onPressed: (){
-            Desktop.of(context).openWindow<MinesweeperSettings>(MinesweeperSettingsView.getWindow(context)).then((result) {
-              if (result is MinesweeperSettings) {
-                context.read<MinesweeperGameCubit>().setSettings(result);
-              }
-            });
-          },
-        ),
         Container(
           decoration: BoxDecoration(
             border: CustomTheme.of(context).elevatedBorder,
