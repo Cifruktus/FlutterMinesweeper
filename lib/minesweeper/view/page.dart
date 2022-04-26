@@ -11,6 +11,8 @@ import 'package:minesweeper/minesweeper/view/game_board.dart';
 import 'package:minesweeper/widgets/theme.dart';
 import 'package:minesweeper/minesweeper/view/indicator.dart';
 
+const defaultCellSize = 23.0;
+
 class MinesweeperWindow extends StatelessWidget {
   final MinesweeperSettings initalSettings;
   const MinesweeperWindow({
@@ -21,6 +23,7 @@ class MinesweeperWindow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Window(
+      expectedSize: Size(defaultCellSize * initalSettings.width, defaultCellSize * initalSettings.height),
       title: "Minesweeper",
       icon: Image.asset("assets/icons/mine_logo.png"),
       appKey: key!,
@@ -80,7 +83,7 @@ class GameView extends StatelessWidget {
       child: GameBoard(
         field: state.field,
         //size: new Size(300, 300),
-        cellSize: 23,
+        cellSize: defaultCellSize,
         modifier: state.modifier,
         finished: state is MinesweeperGameFinished && !state.victory,
         onTap: (pos) => context.read<MinesweeperGameCubit>().openCell(pos),
