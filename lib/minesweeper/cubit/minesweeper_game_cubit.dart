@@ -140,17 +140,13 @@ class MinesweeperGameCubit extends Cubit<MinesweeperGameState> {
   markCell(IntPos pos) {
     var state = this.state;
 
-    if (state is MinesweeperGameFinished) return;
-
-    var board = copyField(state.field);
-    var cell = board[pos.x][pos.y];
-    if (cell.isOpened) return;
-
-    board[pos.x][pos.y] = cell.copyWith(isMarked: !cell.isMarked);
-
     if (state is MinesweeperGameGoing) {
-      emit(state.copyWith(field: board));
-    } else if (state is MinesweeperGameInitial) {
+      var board = copyField(state.field);
+      var cell = board[pos.x][pos.y];
+      if (cell.isOpened) return;
+
+      board[pos.x][pos.y] = cell.copyWith(isMarked: !cell.isMarked);
+
       emit(state.copyWith(field: board));
     }
   }
