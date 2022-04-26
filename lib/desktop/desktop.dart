@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:minesweeper/desktop/icon.dart';
-import 'package:minesweeper/minesweeper/view/page.dart';
 import 'package:minesweeper/theme.dart';
 import 'package:minesweeper/widgets/theme.dart';
 
